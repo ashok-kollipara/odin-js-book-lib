@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./styles.css">
+    <script src="./script.js" defer></script>
+    <title>JS Book Library</title>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1 class="title">JS Library</h1>
+        </div>
+        <div class="entry">
+            <dialog class="book-modal">
+                <form method="dialog" id="book-form-entry" class="book-form-entry">
+                    <fieldset>
+                        <legend>Enter the new book details</legend>
+                        <ul class="form-fields">
+                            <li class="title">
+                                <label for="title">
+                                    Title: <input type="text" id="title" name="title">
+                                </label>
+                            </li>
+                            <li class="author">
+                                <label for="author">
+                                    Author: <input type="text" id="author" name="author">
+                                </label>
+                            </li>
+                            <li class="pages">
+                                <label for="pages">
+                                    No.of Pages: <input type="number" id="pages" name="pages">
+                                </label>
+                            </li>
+                            <li class="readState">
+                                <label for="readState">
+                                    Read the book ? : <input type="checkbox" id="readState" name="readState">
+                                </label>
+                            </li>
+                            <li class="submit-book">
+                                <input type="submit" value="Submit Book" id="submit-form-data">
+                                <input type="reset" value="Reset" id="reset-form-data">
+                                <button value="Cancel" formMethod="dialog" id="close-dialog">Cancel</button>
+                            </li>
+                        </ul>
+                    </fieldset>
+                </form>
+            </dialog>
+            <button class="addNew"> + New Book </button>
+        </div>
+        <div class="bookshelf"></div>
+    </div>
+</body>
+</html>
