@@ -2,26 +2,6 @@
 
 console.log("Loading script to HTML")
 
-console.log("Creating book card")
-const bookshelf = document.querySelector(".bookshelf")
-function createBookCard(book, id) {
-    console.log("creating book card for book id:", id, book)
-    const bookCard = document.createElement("div")
-    bookCard.attributes.bookId = id
-    let bookDetails = ""
-    for (let [key, value] of Object.entries(book)) {
-        bookDetails += `<li><b>${key.toUpperCase()}:</b> ${value}</li>`
-    }
-    bookCard.innerHTML =`
-    <div>
-        <ul>
-            ${bookDetails}
-        </ul>
-    </div>
-    `
-    bookshelf.appendChild(bookCard)
-}
-
 // Memory Store
 const bookCollection = []
 
@@ -33,13 +13,53 @@ function bookEntry(title, author, pages, isRead) {
     this.isRead = isRead
 }
 
+// populate bookshelf
+function populateBookshelf() {
+    bookshelf.innerHTML = ""
+    for (const [id, book] of bookCollection.entries()) {
+        console.log("Creating book div", id, book)
+        createBookCard(book, id)
+    }
+}
+
 // Library CRUD
 function insertBook(book) {
     bookCollection.push(book)
 }
+function removeBook(event) {
+    console.log("removing book", event.target.id)
+    bookCollection.splice(event.target.getAttribute("id"),1)
+    event.target.parentNode.removeChild(event.target)
+    //event.target.removeEventlistener("click", removeBook)
+    console.log("refreshing bookshelf")
+    populateBookshelf()
+}
 
-function removeBook(id) {
-    bookCollection.splice(id,1)
+// Book card component
+console.log("Creating book card")
+const bookshelf = document.querySelector(".bookshelf")
+function createBookCard(book, id) {
+    console.log("creating book card for book id:", id, book)
+    const bookCard = document.createElement("div")
+    bookCard.attributes.bookId = id
+    let bookDetails = ""
+    const closeButton = document.createElement("button")
+    closeButton.id = id
+    closeButton.className = "delete"
+    closeButton.innerHTML = "X"
+    closeButton.style.fontWeight= "bold"
+    for (let [key, value] of Object.entries(book)) {
+        bookDetails += `<li><b>${key.toUpperCase()}:</b> ${value}</li>`
+    }
+    bookCard.innerHTML =`
+    <div class="bookCard">
+        ${closeButton.outerHTML}
+        <ul>
+            ${bookDetails}
+        </ul>
+    </div>
+    `
+    bookshelf.appendChild(bookCard)
 }
 
 // add some fake books entries
@@ -77,15 +97,18 @@ const handleFormData = () => {
     insertBook(book)
     console.log("Library updated")
     console.log(bookCollection)
-    bookshelf.innerHTML = ""
-    for (const [id, book] of bookCollection.entries()) {
-        console.log("Creating book div", id, book)
-        createBookCard(book, id)
-    }
+    populateBookshelf()
 }
 const submitForm = document.querySelector("#submit-form-data")
 submitForm.addEventListener("click", (event) => {
     event.preventDefault()
     handleFormData()
     closeBookEntryModal()
+})
+
+// delete button event delegation
+bookshelf.addEventListener("click", (event) => {
+    if (event.target.classList.contains("delete")) {
+        removeBook(event)
+    }
 })
