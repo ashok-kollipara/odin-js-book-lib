@@ -137,3 +137,5 @@ bookshelf.addEventListener("click", (event) => {
         toggleReadState(event)
     }
 })
+
+populateBookshelf()
