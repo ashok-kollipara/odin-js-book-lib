@@ -35,6 +35,15 @@ function removeBook(event) {
     populateBookshelf()
 }
 
+function toggleReadState(event) {
+    console.log("toggle read state for the book", event.target.id)
+    const book = bookCollection[event.target.id]
+    book.isRead = !(book.isRead)
+    console.log("updating book collection object")
+    bookCollection[event.target.id] = book
+    populateBookshelf()
+}
+
 // Book card component
 console.log("Creating book card")
 const bookshelf = document.querySelector(".bookshelf")
@@ -48,15 +57,25 @@ function createBookCard(book, id) {
     closeButton.className = "delete"
     closeButton.innerHTML = "X"
     closeButton.style.fontWeight= "bold"
-    for (let [key, value] of Object.entries(book)) {
-        bookDetails += `<li><b>${key.toUpperCase()}:</b> ${value}</li>`
-    }
+    const readStateButton = document.createElement("button")
+    readStateButton.id = id
+    readStateButton.className = "toggle"
+    readStateButton.innerHTML = book.isRead ? "Mark as Unread" : "Mark as Read"
+    readStateButton.style.fontWeight= "bold"
+    //for (let [key, value] of Object.entries(book)) {
+    //    bookDetails += `<li><b>${key.toUpperCase()}:</b> ${value}</li>`
+    //}
+    bookDetails += `<li><b>Title:</b> ${book.title}</li>`
+    bookDetails += `<li><b>Author:</b> ${book.author}</li>`
+    bookDetails += `<li><b>Pages:</b> ${book.pages}</li>`
+    bookDetails += `<li><b>Read:</b> ${book.isRead ? 'Yes': 'No'}</li>`
     bookCard.innerHTML =`
     <div class="bookCard">
         ${closeButton.outerHTML}
         <ul>
             ${bookDetails}
         </ul>
+        ${readStateButton.outerHTML}
     </div>
     `
     bookshelf.appendChild(bookCard)
@@ -110,5 +129,11 @@ submitForm.addEventListener("click", (event) => {
 bookshelf.addEventListener("click", (event) => {
     if (event.target.classList.contains("delete")) {
         removeBook(event)
+    }
+})
+
+bookshelf.addEventListener("click", (event) => {
+    if (event.target.classList.contains("toggle")) {
+        toggleReadState(event)
     }
 })
